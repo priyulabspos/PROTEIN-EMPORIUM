@@ -8,12 +8,15 @@
 import { 
   StaffProfile, Category, Brand, Collection, Product, 
   Order, InventoryBatch, Coupon, ScratchCode, AuditLog, NotificationItem,
-  OrderStatus
+  OrderStatus, ReturnRequest, PaymentTransaction, ProductReview, SupportTicket,
+  HeroBanner, PolicyPage, AbandonedCart, StoreSettings
 } from './types';
 import { 
   INITIAL_STAFF, INITIAL_CATEGORIES, INITIAL_BRANDS, INITIAL_COLLECTIONS, 
   INITIAL_PRODUCTS, INITIAL_ORDERS, INITIAL_BATCHES, INITIAL_COUPONS, 
-  INITIAL_SCRATCH_CODES, INITIAL_AUDIT_LOGS, INITIAL_NOTIFICATIONS 
+  INITIAL_SCRATCH_CODES, INITIAL_AUDIT_LOGS, INITIAL_NOTIFICATIONS,
+  INITIAL_RETURNS, INITIAL_PAYMENTS, INITIAL_REVIEWS, INITIAL_TICKETS,
+  INITIAL_BANNERS, INITIAL_POLICIES, INITIAL_ABANDONED_CARTS, INITIAL_SETTINGS
 } from './mock-data';
 
 class AdminStore {
@@ -29,6 +32,14 @@ class AdminStore {
   private scratchCodes: ScratchCode[] = INITIAL_SCRATCH_CODES;
   private auditLogs: AuditLog[] = INITIAL_AUDIT_LOGS;
   private notifications: NotificationItem[] = INITIAL_NOTIFICATIONS;
+  private returns: ReturnRequest[] = INITIAL_RETURNS;
+  private payments: PaymentTransaction[] = INITIAL_PAYMENTS;
+  private reviews: ProductReview[] = INITIAL_REVIEWS;
+  private tickets: SupportTicket[] = INITIAL_TICKETS;
+  private banners: HeroBanner[] = INITIAL_BANNERS;
+  private policies: PolicyPage[] = INITIAL_POLICIES;
+  private abandonedCarts: AbandonedCart[] = INITIAL_ABANDONED_CARTS;
+  private settings: StoreSettings = INITIAL_SETTINGS;
   private isClient = false;
 
   constructor() {
@@ -63,6 +74,30 @@ class AdminStore {
 
       const sNotifs = localStorage.getItem('pe_admin_notifications');
       if (sNotifs) this.notifications = JSON.parse(sNotifs);
+
+      const sReturns = localStorage.getItem('pe_admin_returns');
+      if (sReturns) this.returns = JSON.parse(sReturns);
+
+      const sPayments = localStorage.getItem('pe_admin_payments');
+      if (sPayments) this.payments = JSON.parse(sPayments);
+
+      const sReviews = localStorage.getItem('pe_admin_reviews');
+      if (sReviews) this.reviews = JSON.parse(sReviews);
+
+      const sTickets = localStorage.getItem('pe_admin_tickets');
+      if (sTickets) this.tickets = JSON.parse(sTickets);
+
+      const sBanners = localStorage.getItem('pe_admin_banners');
+      if (sBanners) this.banners = JSON.parse(sBanners);
+
+      const sPolicies = localStorage.getItem('pe_admin_policies');
+      if (sPolicies) this.policies = JSON.parse(sPolicies);
+
+      const sCarts = localStorage.getItem('pe_admin_abandoned_carts');
+      if (sCarts) this.abandonedCarts = JSON.parse(sCarts);
+
+      const sSettings = localStorage.getItem('pe_admin_settings');
+      if (sSettings) this.settings = JSON.parse(sSettings);
     } catch (err) {
       console.warn('Could not read admin state from localStorage:', err);
     }
@@ -346,6 +381,231 @@ class AdminStore {
       pendingReturns: 2,
       conversionRate: "3.42%"
     };
+  }
+
+  // --- Returns & Refunds ---
+  getReturns(): ReturnRequest[] { return this.returns; }
+  
+  getReturn(id: number): ReturnRequest | undefined {
+    return this.returns.find(r => r.id === id);
+  }
+
+  updateReturn(id: number, updates: Partial<ReturnRequest>): ReturnRequest | undefined {
+    const item = this.returns.find(r => r.id === id);
+    if (!item) return undefined;
+    Object.assign(item, updates, { updated_at: new Date().toISOString() });
+    this.persist('pe_admin_returns', this.returns);
+    this.logAction('UPDATE', 'RETURNS', item.return_number, `Updated return ${item.return_number} status to ${item.status}`);
+    return item;
+  }
+
+  processRefund(returnId: number, refundAmount: number, mode: 'ORIGINAL_PAYMENT' | 'STORE_WALLET'): ReturnRequest | undefined {
+    const item = this.returns.find(r => r.id === returnId);
+    if (!item) return undefined;
+    item.status = 'REFUNDED';
+    item.refund_mode = mode;
+    item.refund_amount = refundAmount;
+    item.razorpay_refund_id = `rfnd_${Math.random().toString(36).substring(2, 11)}`;
+    item.updated_at = new Date().toISOString();
+    this.persist('pe_admin_returns', this.returns);
+    this.logAction('STATUS_CHANGE', 'RETURNS', item.return_number, `Processed refund of ₹${refundAmount} via ${mode} (${item.razorpay_refund_id})`);
+    return item;
+  }
+
+  // --- Payments & Transactions ---
+  getPayments(): PaymentTransaction[] { return this.payments; }
+
+  // --- Reviews & Moderation ---
+  getReviews(): ProductReview[] { return this.reviews; }
+
+  updateReviewStatus(id: number, status: 'APPROVED' | 'REJECTED'): ProductReview | undefined {
+    const rev = this.reviews.find(r => r.id === id);
+    if (!rev) return undefined;
+    rev.status = status;
+    this.persist('pe_admin_reviews', this.reviews);
+    this.logAction('UPDATE', 'REVIEWS', String(id), `Review ${id} status set to ${status}`);
+    return rev;
+  }
+
+  replyReview(id: number, reply: string): ProductReview | undefined {
+    const rev = this.reviews.find(r => r.id === id);
+    if (!rev) return undefined;
+    rev.admin_reply = reply;
+    this.persist('pe_admin_reviews', this.reviews);
+    this.logAction('UPDATE', 'REVIEWS', String(id), `Admin replied to review ${id}`);
+    return rev;
+  }
+
+  toggleReviewFeatured(id: number): ProductReview | undefined {
+    const rev = this.reviews.find(r => r.id === id);
+    if (!rev) return undefined;
+    rev.is_featured = !rev.is_featured;
+    this.persist('pe_admin_reviews', this.reviews);
+    return rev;
+  }
+
+  // --- Support Desk & Tickets ---
+  getTickets(): SupportTicket[] { return this.tickets; }
+
+  getTicket(id: number): SupportTicket | undefined {
+    return this.tickets.find(t => t.id === id);
+  }
+
+  addTicketMessage(ticketId: number, text: string, senderName: string, isStaff: boolean): SupportTicket | undefined {
+    const t = this.tickets.find(item => item.id === ticketId);
+    if (!t) return undefined;
+    const newMsg = {
+      id: Date.now(),
+      sender_name: senderName,
+      is_staff: isStaff,
+      message: text,
+      created_at: new Date().toISOString()
+    };
+    t.messages.push(newMsg);
+    t.updated_at = new Date().toISOString();
+    if (isStaff && t.status === 'OPEN') t.status = 'IN_PROGRESS';
+    this.persist('pe_admin_tickets', this.tickets);
+    this.logAction('UPDATE', 'SUPPORT', t.ticket_number, `Added message to ticket ${t.ticket_number}`);
+    return t;
+  }
+
+  updateTicketStatus(ticketId: number, status: SupportTicket['status']): SupportTicket | undefined {
+    const t = this.tickets.find(item => item.id === ticketId);
+    if (!t) return undefined;
+    t.status = status;
+    t.updated_at = new Date().toISOString();
+    this.persist('pe_admin_tickets', this.tickets);
+    this.logAction('STATUS_CHANGE', 'SUPPORT', t.ticket_number, `Ticket ${t.ticket_number} marked as ${status}`);
+    return t;
+  }
+
+  // --- Scratch Codes Generator ---
+  generateScratchBatch(params: {
+    batchId: number;
+    count: number;
+    batchCode: string;
+    productName: string;
+    mfgDate: string;
+    expiryDate: string;
+    proteinContentPercent: number;
+  }): ScratchCode[] {
+    const generated: ScratchCode[] = [];
+    for (let i = 0; i < params.count; i++) {
+      const part1 = Math.floor(1000 + Math.random() * 9000);
+      const part2 = Math.floor(1000 + Math.random() * 9000);
+      const codeStr = `PE-${part1}-${part2}`;
+      const newCode: ScratchCode = {
+        id: Date.now() + i,
+        batch_id: params.batchId,
+        code: codeStr,
+        status: 'UNUSED',
+        verification_count: 0,
+        batch: {
+          batch_code: params.batchCode,
+          product_name: params.productName,
+          mfg_date: params.mfgDate,
+          expiry_date: params.expiryDate,
+          protein_content_percent: params.proteinContentPercent
+        }
+      };
+      generated.push(newCode);
+      this.scratchCodes.unshift(newCode);
+    }
+    this.persist('pe_admin_scratch_codes', this.scratchCodes);
+    this.logAction('CREATE', 'SCRATCH_CODES', params.batchCode, `Generated ${params.count} authenticity codes for batch ${params.batchCode}`);
+    return generated;
+  }
+
+  // --- CMS (Banners & Policy Pages) ---
+  getBanners(): HeroBanner[] { return this.banners; }
+
+  saveBanner(banner: Partial<HeroBanner> & { title: string }): HeroBanner {
+    let saved: HeroBanner;
+    if (banner.id) {
+      const idx = this.banners.findIndex(b => b.id === banner.id);
+      saved = { ...this.banners[idx], ...banner };
+      this.banners[idx] = saved;
+      this.logAction('UPDATE', 'CMS', String(saved.id), `Updated hero banner ${saved.title}`);
+    } else {
+      const newId = Math.max(0, ...this.banners.map(b => b.id)) + 1;
+      saved = {
+        id: newId,
+        title: banner.title,
+        subtitle: banner.subtitle || '',
+        badge_text: banner.badge_text || 'EXCLUSIVE',
+        image_url: banner.image_url || 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80',
+        cta_text: banner.cta_text || 'Explore Products',
+        cta_link: banner.cta_link || '/products',
+        sort_order: banner.sort_order || this.banners.length + 1,
+        is_active: banner.is_active ?? true
+      };
+      this.banners.push(saved);
+      this.logAction('CREATE', 'CMS', String(saved.id), `Created hero banner ${saved.title}`);
+    }
+    this.persist('pe_admin_banners', this.banners);
+    return saved;
+  }
+
+  deleteBanner(id: number): boolean {
+    const idx = this.banners.findIndex(b => b.id === id);
+    if (idx === -1) return false;
+    this.banners.splice(idx, 1);
+    this.persist('pe_admin_banners', this.banners);
+    this.logAction('DELETE', 'CMS', String(id), `Deleted hero banner ${id}`);
+    return true;
+  }
+
+  getPolicies(): PolicyPage[] { return this.policies; }
+
+  savePolicy(slug: string, content: string, title?: string): PolicyPage | undefined {
+    const pol = this.policies.find(p => p.slug === slug);
+    if (!pol) return undefined;
+    pol.content = content;
+    if (title) pol.title = title;
+    pol.last_updated = new Date().toISOString().split('T')[0];
+    this.persist('pe_admin_policies', this.policies);
+    this.logAction('UPDATE', 'CMS', slug, `Updated policy page ${slug}`);
+    return pol;
+  }
+
+  // --- Abandoned Carts ---
+  getAbandonedCarts(): AbandonedCart[] { return this.abandonedCarts; }
+
+  sendWhatsAppRecovery(id: number): boolean {
+    const cart = this.abandonedCarts.find(c => c.id === id);
+    if (!cart) return false;
+    cart.recovery_status = 'SENT';
+    this.persist('pe_admin_abandoned_carts', this.abandonedCarts);
+    this.logAction('UPDATE', 'REPORTS', String(id), `Sent recovery WhatsApp to ${cart.customer_name} (${cart.customer_phone})`);
+    return true;
+  }
+
+  // --- Settings ---
+  getSettings(): StoreSettings { return this.settings; }
+
+  updateSettings(updates: Partial<StoreSettings>): StoreSettings {
+    this.settings = { ...this.settings, ...updates };
+    this.persist('pe_admin_settings', this.settings);
+    this.logAction('UPDATE', 'SETTINGS', 'STORE_SETTINGS', 'Updated store business & integration configurations');
+    return this.settings;
+  }
+
+  // --- Staff Management ---
+  inviteStaff(data: { full_name: string; email: string; role: StaffProfile['role']; phone?: string }): StaffProfile {
+    const newStaff: StaffProfile = {
+      id: `a0000000-0000-0000-0000-${Math.floor(100000000000 + Math.random() * 900000000000)}`,
+      full_name: data.full_name,
+      email: data.email,
+      phone: data.phone || '+91 98000 00000',
+      role: data.role,
+      is_active: true,
+      two_factor_enabled: false,
+      failed_login_attempts: 0,
+      created_at: new Date().toISOString()
+    };
+    this.staff.push(newStaff);
+    this.logAction('CREATE', 'STAFF', newStaff.email, `Invited new staff ${newStaff.full_name} (${newStaff.role})`);
+    return newStaff;
   }
 }
 

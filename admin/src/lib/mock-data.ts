@@ -394,3 +394,274 @@ export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   { id: 2, type: 'LOW_STOCK', title: 'Low Stock Alert: Dymatize ISO 5lb', message: 'Stock has fallen to 14 units (Threshold: 4).', link: '/inventory', is_read: false, created_at: '2026-11-25T18:00:00Z' },
   { id: 3, type: 'EXPIRY_WARNING', title: 'Batch Inspection Notice', message: 'Batch GPN-26-081 passes 3 months milestone. Quality verified.', link: '/inventory', is_read: true, created_at: '2026-11-24T12:00:00Z' }
 ];
+
+export const INITIAL_RETURNS: any[] = [
+  {
+    id: 1,
+    return_number: 'RET-1092',
+    order_id: 2,
+    order_number: 'PE-88220',
+    customer_name: 'Priya Patel',
+    customer_phone: '+91 98223 34455',
+    customer_email: 'priya.patel@yahoo.com',
+    product_name: 'Emporium Labs 100% Creapure® Creatine Monohydrate',
+    variant_name: '250 g • Unflavoured',
+    quantity: 1,
+    item_price: 1199,
+    reason: 'DEFECTIVE_SEAL',
+    customer_notes: 'Outer plastic seal was loose upon opening the parcel box. Want replacement or refund.',
+    image_urls: ['https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=400&q=80'],
+    status: 'REQUESTED',
+    qc_status: 'PENDING',
+    refund_mode: 'ORIGINAL_PAYMENT',
+    refund_amount: 1199,
+    created_at: '2026-11-25T10:30:00Z',
+    updated_at: '2026-11-25T10:30:00Z'
+  },
+  {
+    id: 2,
+    return_number: 'RET-1091',
+    order_id: 1,
+    order_number: 'PE-88219',
+    customer_name: 'Rahul Sharma',
+    customer_phone: '+91 98765 43210',
+    customer_email: 'rahul.fitness@gmail.com',
+    product_name: 'Optimum Nutrition Gold Standard 100% Whey',
+    variant_name: '1 kg • Double Rich Chocolate',
+    quantity: 1,
+    item_price: 3349,
+    reason: 'DAMAGED_IN_TRANSIT',
+    customer_notes: 'Jar bottom was cracked during shipping. Protein spilled inside the bubble bag.',
+    image_urls: ['https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=400&q=80'],
+    status: 'QC_PASSED',
+    qc_status: 'DAMAGED_PACK',
+    refund_mode: 'ORIGINAL_PAYMENT',
+    refund_amount: 3349,
+    razorpay_refund_id: 'rfnd_NzpX992LKa',
+    restock_choice: 'MARK_DAMAGED',
+    created_at: '2026-11-24T14:15:00Z',
+    updated_at: '2026-11-25T11:00:00Z'
+  }
+];
+
+export const INITIAL_PAYMENTS: any[] = [
+  {
+    id: 1,
+    transaction_id: 'pay_Nzo981LKa091',
+    order_number: 'PE-88219',
+    customer_name: 'Rahul Sharma',
+    customer_email: 'rahul.fitness@gmail.com',
+    amount: 3349,
+    gateway_fee: 66.98,
+    tax_on_fee: 12.06,
+    net_amount: 3269.96,
+    payment_method: 'UPI',
+    status: 'CAPTURED',
+    settlement_status: 'SETTLED',
+    bank_rrn: '433290192831',
+    upi_vpa: 'rahul@okhdfcbank',
+    created_at: '2026-11-25T11:42:00Z'
+  },
+  {
+    id: 2,
+    transaction_id: 'pay_Nzk881LMb102',
+    order_number: 'PE-88220',
+    customer_name: 'Priya Patel',
+    customer_email: 'priya.patel@yahoo.com',
+    amount: 1199,
+    gateway_fee: 23.98,
+    tax_on_fee: 4.32,
+    net_amount: 1170.70,
+    payment_method: 'CREDIT_CARD',
+    status: 'CAPTURED',
+    settlement_status: 'SETTLED',
+    bank_rrn: '433100291044',
+    created_at: '2026-11-22T16:00:00Z'
+  },
+  {
+    id: 3,
+    transaction_id: 'pay_Nzf771LKc993',
+    order_number: 'PE-88218',
+    customer_name: 'Suresh Raina',
+    customer_email: 'suresh.r@gmail.com',
+    amount: 5499,
+    gateway_fee: 0,
+    tax_on_fee: 0,
+    net_amount: 0,
+    payment_method: 'UPI',
+    status: 'FAILED',
+    settlement_status: 'PENDING',
+    bank_rrn: '',
+    created_at: '2026-11-21T18:22:00Z'
+  }
+];
+
+export const INITIAL_REVIEWS: any[] = [
+  {
+    id: 1,
+    product_id: 1,
+    product_name: 'Optimum Nutrition Gold Standard 100% Whey',
+    customer_name: 'Varun Grover',
+    rating: 5,
+    title: '100% genuine batch! Checked scratch code on website',
+    comment: 'Scratched the code on the seal, entered it on the site and verified the Glanbia import code instantly. Super quick delivery to Delhi!',
+    is_verified_buyer: true,
+    status: 'APPROVED',
+    is_featured: true,
+    admin_reply: 'Thank you Varun! We source every ON tub straight from official Glanbia India distributors.',
+    created_at: '2026-11-24T16:30:00Z'
+  },
+  {
+    id: 2,
+    product_id: 2,
+    product_name: 'Dymatize ISO 100 Hydrolyzed Whey Protein',
+    customer_name: 'Karan Mehra',
+    rating: 5,
+    title: 'Flavour is unmatched - Gourmet Chocolate',
+    comment: 'Dissolves cleanly without any lumps in cold water. Best isolate on the market for cutting.',
+    is_verified_buyer: true,
+    status: 'APPROVED',
+    is_featured: true,
+    created_at: '2026-11-23T11:00:00Z'
+  },
+  {
+    id: 3,
+    product_id: 4,
+    product_name: 'Emporium Labs 100% Creapure® Creatine Monohydrate',
+    customer_name: 'Manish Rawat',
+    rating: 4,
+    title: 'Authentic German Creapure',
+    comment: 'Great solubility and no stomach upset. Delivery took 4 days to Pune, packaging was great.',
+    is_verified_buyer: true,
+    status: 'PENDING',
+    is_featured: false,
+    created_at: '2026-11-26T08:15:00Z'
+  }
+];
+
+export const INITIAL_TICKETS: any[] = [
+  {
+    id: 1,
+    ticket_number: 'TKT-4401',
+    customer_name: 'Rahul Sharma',
+    customer_email: 'rahul.fitness@gmail.com',
+    customer_phone: '+91 98765 43210',
+    subject: 'Damaged ON 1kg tub received during courier transit',
+    order_number: 'PE-88219',
+    priority: 'HIGH',
+    status: 'IN_PROGRESS',
+    assigned_to: 'Pooja Sharma',
+    created_at: '2026-11-25T14:30:00Z',
+    updated_at: '2026-11-25T16:00:00Z',
+    messages: [
+      { id: 1, sender_name: 'Rahul Sharma', is_staff: false, message: 'Hi team, I received order PE-88219 today but the courier delivery boy dropped the package. The bottom seal is cracked and powder is leaking out.', created_at: '2026-11-25T14:30:00Z' },
+      { id: 2, sender_name: 'Pooja Sharma (Support)', is_staff: true, message: 'Hello Rahul, extremely sorry about the transit damage. We have initiated a replacement order immediately and arranged reverse pickup.', created_at: '2026-11-25T16:00:00Z' }
+    ]
+  },
+  {
+    id: 2,
+    ticket_number: 'TKT-4402',
+    customer_name: 'Anand Kulkarni',
+    customer_email: 'anand.k@gmail.com',
+    customer_phone: '+91 99887 66554',
+    subject: 'Scratch code verification guidance',
+    priority: 'LOW',
+    status: 'OPEN',
+    assigned_to: 'Pooja Sharma',
+    created_at: '2026-11-26T10:15:00Z',
+    updated_at: '2026-11-26T10:15:00Z',
+    messages: [
+      { id: 1, sender_name: 'Anand Kulkarni', is_staff: false, message: 'Where do I find the scratch code on my MuscleBlaze Biozyme tub?', created_at: '2026-11-26T10:15:00Z' }
+    ]
+  }
+];
+
+export const INITIAL_BANNERS: any[] = [
+  {
+    id: 1,
+    title: '100% Genuine Certified Nutrition',
+    subtitle: 'Sourced directly from authorized brand importers with lab certificates and tamper-proof scratch verification.',
+    badge_text: 'AUTHENTICITY GUARANTEE',
+    image_url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80',
+    cta_text: 'Shop Authentic Whey',
+    cta_link: '/products',
+    sort_order: 1,
+    is_active: true
+  },
+  {
+    id: 2,
+    title: 'Flat 5% OFF on Welcome Orders',
+    subtitle: 'Use coupon code PROTEIN5 at checkout. Free express shipping across India on orders over ₹499.',
+    badge_text: 'LIMITED TIME DEAL',
+    image_url: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=800&q=80',
+    cta_text: 'Claim Coupon',
+    cta_link: '/coupons',
+    sort_order: 2,
+    is_active: true
+  }
+];
+
+export const INITIAL_POLICIES: any[] = [
+  {
+    id: 1,
+    title: 'Authenticity & Genuine Guarantee',
+    slug: 'authenticity-guarantee',
+    last_updated: '2026-11-01',
+    content: 'Every product sold on Protein Emporium carries a genuine scratch-off holographic verification code. Sourced directly from brand brand-authorized importers (Glanbia, Bright Commodities, MuscleBlaze, MuscleTech). Never from grey market third-party intermediaries.'
+  },
+  {
+    id: 2,
+    title: 'Shipping & Delivery Policy',
+    slug: 'shipping-policy',
+    last_updated: '2026-11-01',
+    content: 'Free courier shipping across all major Indian pincodes on orders above ₹499. Orders confirmed before 2:00 PM IST are dispatched same-day via BlueDart Express or Delhivery Air. Metro deliveries in 24-48 hours.'
+  },
+  {
+    id: 3,
+    title: '7-Day Return & Replacement Policy',
+    slug: 'returns-policy',
+    last_updated: '2026-11-01',
+    content: 'Returns and replacements are accepted within 7 days of delivery for damaged shipments, seal tampering, or wrong products delivered. Due to food safety and FSSAI standards, opened or unsealed supplement containers cannot be returned for taste preferences.'
+  }
+];
+
+export const INITIAL_ABANDONED_CARTS: any[] = [
+  {
+    id: 1,
+    customer_name: 'Deepak Joshi',
+    customer_phone: '+91 98199 88776',
+    items_count: 2,
+    cart_value: 4548,
+    items_summary: 'ON Gold Standard 1kg + Creapure 250g',
+    abandoned_at: '2026-11-26T15:20:00Z',
+    recovery_status: 'PENDING'
+  },
+  {
+    id: 2,
+    customer_name: 'Simran Kaur',
+    customer_phone: '+91 98777 66554',
+    items_count: 1,
+    cart_value: 3999,
+    items_summary: 'Dymatize ISO 100 1kg Gourmet Chocolate',
+    abandoned_at: '2026-11-25T19:40:00Z',
+    recovery_status: 'SENT'
+  }
+];
+
+export const INITIAL_SETTINGS: any = {
+  store_name: 'Protein Emporium',
+  legal_name: 'Protein Emporium Nutrition Pvt Ltd',
+  gstin: '07AABCP1234F1Z5',
+  fssai_number: '10021064000123',
+  support_email: 'care@proteinemporium.com',
+  support_phone: '+91 98765 43210',
+  warehouse_address: 'Plot 44, Okhla Industrial Area Phase III, New Delhi 110020',
+  free_shipping_threshold: 499,
+  standard_shipping_fee: 50,
+  razorpay_key_id: 'rzp_test_PE10928374',
+  razorpay_key_secret: '••••••••••••••••••••••••',
+  razorpay_mode: 'TEST',
+  shiprocket_email: 'logistics@proteinemporium.com',
+  shiprocket_token: '••••••••••••••••••••••••',
+  return_window_days: 7
+};
