@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Account & Orders – Protein Emporium</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tx: #14110e;
+  --mu: #645d51;
+  --bd: #e4dfd4;
+  --s: #f8f6f2;
+  --s2: #ede8df;
+  --or: #f58a07;
+  --or-dk: #d97400;
+  --or-lt: #fff6eb;
+  --bk: #120f0c;
+  --gr: #15803d;
+  --gr-lt: #eef9f1;
+  --bl: #2563eb;
+  --bl-lt: #eff6ff;
+  --rd: #dc2626;
+  --card-rd: 16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font: 16px/1.55 'Barlow', system-ui, -apple-system, sans-serif;
+  background: #fbf9f5;
+  color: var(--tx);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1,h2,h3,h4,.dsp{
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit;background:none;border:0}
+input,select{font:inherit}
+
+/* Header */
+.dash-header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--bd);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+}
+.dash-header .w{
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{height:54px;width:auto;object-fit:contain}
+.header-actions{display:flex;align-items:center;gap:14px}
+.store-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 14.5px;
+  transition: all 0.2s;
+}
+.store-link:hover{border-color:var(--or);color:var(--or-dk);background:var(--or-lt)}
+
+.user-pill{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+.avatar{
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or), #d97400);
+  color: #120f0c;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+.user-info{line-height:1.2}
+.user-info b{font-size:14.5px;display:block}
+.user-info small{color:var(--gr);font-weight:800;font-size:11.5px}
+
+.btn-logout{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rd);
+  border: 1.5px solid #fecaca;
+  background: #fff;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.btn-logout:hover{background:#fee2e2}
+
+/* Main Layout */
+.dash-main{
+  max-width: 1240px;
+  width: 100%;
+  margin: 32px auto;
+  padding: 0 20px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Sidebar Nav */
+.sidebar{
+  background: #fff;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--card-rd);
+  padding: 20px 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+}
+.nav-item{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--mu);
+  margin-bottom: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.nav-item:hover{
+  background: var(--s);
+  color: var(--tx);
+}
+.nav-item.active{
+  background: var(--or-lt);
+  color: var(--or-dk);
+  border: 1px solid var(--or);
+  font-weight: 800;
+}
+.nav-badge{
+  margin-left: auto;
+  background: var(--or);
+  color: #120f0c;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+/* Content Area */
+.content-panel{
+  background: #fff;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--card-rd);
+  padding: 32px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+}
+.panel-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--bd);
+}
+.panel-header h2{font-size:32px;text-transform:uppercase}
+.panel-header p{color:var(--mu);font-size:14.5px;margin-top:2px}
+
+/* KPI Cards */
+.kpi-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card{
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 14px;
+  padding: 20px;
+  transition: transform 0.2s;
+}
+.kpi-card:hover{transform:translateY(-2px);border-color:var(--or)}
+.kpi-num{font-size:34px;font-family:'Barlow Condensed';font-weight:800;margin:6px 0 2px}
+.kpi-label{font-size:13.5px;color:var(--mu);font-weight:600}
+
+/* Orders List */
+.order-card{
+  border: 1.5px solid var(--bd);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.order-card:hover{border-color:#cdc4b4;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.order-top{
+  background: var(--s);
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--bd);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.order-meta{display:flex;gap:24px;font-size:14px}
+.order-meta div small{display:block;color:var(--mu);font-size:12px;font-weight:600}
+.order-meta div b{color:var(--tx);font-size:15px}
+
+.status-badge{
+  font: 800 12px 'Barlow Condensed';
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.status-badge.dispatched{background:#dbeafe;color:#1e40af}
+.status-badge.delivered{background:#dcfce7;color:#166534}
+.status-badge.processing{background:#fef3c7;color:#92400e}
+
+.order-body{padding:22px}
+.order-item{
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px dashed var(--bd);
+}
+.order-item:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}
+.order-thumb{
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  border: 1px solid var(--bd);
+  background: #fff;
+  object-fit: contain;
+  padding: 4px;
+}
+.order-item-info{flex:1}
+.order-item-info b{font-size:16px;color:var(--tx);display:block}
+.order-item-info small{color:var(--mu);font-size:13.5px}
+.order-item-price{font-weight:800;font-size:16px;color:var(--tx)}
+
+/* Tracking Progress Stepper */
+.stepper{
+  margin-top: 20px;
+  padding: 18px 20px;
+  background: var(--s);
+  border-radius: 12px;
+  border: 1px solid var(--bd);
+}
+.stepper-title{font-size:13px;font-weight:800;color:var(--mu);text-transform:uppercase;margin-bottom:14px;letter-spacing:0.04em}
+.stepper-steps{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: relative;
+}
+.stepper-step{
+  text-align: center;
+  position: relative;
+  font-size: 12.5px;
+}
+.step-dot{
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  border: 2px solid var(--bd);
+  background: #fff;
+  color: var(--mu);
+}
+.stepper-step.done .step-dot{
+  background: var(--gr);
+  border-color: var(--gr);
+  color: #fff;
+}
+.stepper-step.active .step-dot{
+  background: var(--or);
+  border-color: var(--or);
+  color: #120f0c;
+  box-shadow: 0 0 0 4px rgba(245,138,7,0.25);
+}
+.stepper-step b{display:block;font-size:13px}
+.stepper-step small{color:var(--mu);font-size:11.5px}
+
+.order-actions{
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.btn-sub{
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1.5px solid var(--bd);
+  background: #fff;
+  transition: all 0.2s;
+}
+.btn-sub:hover{border-color:var(--or);color:var(--or-dk)}
+.btn-pri{
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  background: var(--or);
+  color: #120f0c;
+  transition: all 0.2s;
+}
+.btn-pri:hover{background:var(--or-dk)}
+
+/* Certificate Cards */
+.cert-card{
+  border: 1.5px solid var(--bd);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 18px;
+  background: linear-gradient(145deg, #f9fafb 0%, #ffffff 100%);
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+.cert-img{
+  width: 76px;
+  height: 76px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--bd);
+  object-fit: contain;
+  padding: 6px;
+}
+.cert-info h3{font-size:18px;margin-bottom:4px}
+.cert-badge{
+  display: inline-block;
+  background: var(--gr-lt);
+  color: var(--gr);
+  border: 1px solid #bbf7d0;
+  font: 800 12px 'Barlow Condensed';
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+/* Addresses Grid */
+.address-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.addr-card{
+  border: 1.5px solid var(--bd);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+  background: #fff;
+}
+.addr-card.primary{
+  border-color: var(--or);
+  background: var(--or-lt);
+}
+.addr-card b{font-size:16px;display:block;margin-bottom:6px}
+.addr-card p{color:var(--mu);font-size:14.5px;line-height:1.5}
+
+/* Forms */
+.fg{margin-bottom:18px}
+.fg label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.fg input{
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--bd);
+  border-radius: 10px;
+  font-size: 15px;
+  background: var(--s);
+}
+.fg input:focus{outline:none;border-color:var(--or);background:#fff}
+.fg-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+@media(max-width:960px){
+  .dash-main{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .address-grid{grid-template-columns:1fr}
+  .cert-card{grid-template-columns:1fr;text-align:center}
+  .cert-img{margin:0 auto}
+}
+@media(max-width:640px){
+  .kpi-grid{grid-template-columns:1fr}
+  .stepper-steps{grid-template-columns:1fr 1fr;gap:12px}
+  .order-top{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header class="dash-header">
+  <div class="w">
+    <a href="index.html" class="brand" aria-label="Protein Emporium">
+      <img src="assets/logo.png" alt="Protein Emporium">
+    </a>
+
+    <div class="header-actions">
+      <a href="index.html" class="store-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Shop Supplements</span>
+      </a>
+
+      <div class="user-pill">
+        <div class="avatar" id="user-avatar">R</div>
+        <div class="user-info">
+          <b id="user-display-name">Rahul Sharma</b>
+          <small>✔ VERIFIED CUSTOMER</small>
+        </div>
+      </div>
+
+      <button class="btn-logout" onclick="logout()" title="Logout from customer account">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="dash-main">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="nav-item active" onclick="showSection('overview')">
+      <span>📊</span> Overview
+    </div>
+    <div class="nav-item" onclick="showSection('orders')">
+      <span>📦</span> My Orders & Tracking
+      <span class="nav-badge" id="order-count-badge">2</span>
+    </div>
+    <div class="nav-item" onclick="showSection('certs')">
+      <span>🛡️</span> Verified Certificates
+    </div>
+    <div class="nav-item" onclick="showSection('addresses')">
+      <span>📍</span> Delivery Addresses
+    </div>
+    <div class="nav-item" onclick="showSection('wishlist')">
+      <span>❤️</span> Saved Wishlist
+    </div>
+    <div class="nav-item" onclick="showSection('settings')">
+      <span>⚙️</span> Account Settings
+    </div>
+  </aside>
+
+  <!-- Content Panels -->
+  <div class="content-panel">
+
+    <!-- Section 1: Overview -->
+    <div id="sec-overview">
+      <div class="panel-header">
+        <div>
+          <h2>Account Overview</h2>
+          <p>Welcome back! Here is a summary of your orders, genuine batch verifications & deliveries.</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Orders Placed</div>
+          <div class="kpi-num" id="kpi-orders">2</div>
+          <small style="color:var(--gr);font-weight:700">100% Genuine Certified</small>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Shipments In Transit</div>
+          <div class="kpi-num" style="color:var(--bl)">1</div>
+          <small style="color:var(--mu);font-weight:600">Arriving today</small>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Verified Supplements</div>
+          <div class="kpi-num" style="color:var(--gr)">2</div>
+          <small style="color:var(--gr);font-weight:700">Purity batch tested</small>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Loyalty Reward Points</div>
+          <div class="kpi-num" style="color:var(--or-dk)" id="kpi-pts">340</div>
+          <small style="color:var(--mu);font-weight:600">Worth ₹170 off next order</small>
+        </div>
+      </div>
+
+      <h3 style="font-size:22px;margin-bottom:14px">Active Shipment Tracker</h3>
+      <div id="overview-active-order"></div>
+
+      <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap">
+        <button class="btn-pri" onclick="showSection('orders')">View Complete Order History ›</button>
+        <button class="btn-sub" onclick="window.location.href='index.html#help'">Verify Another Supplement Scratch Code</button>
+      </div>
+    </div>
+
+    <!-- Section 2: Orders -->
+    <div id="sec-orders" style="display:none">
+      <div class="panel-header">
+        <div>
+          <h2>My Orders & Live Courier Tracking</h2>
+          <p>Track packages with live step-by-step courier milestone updates.</p>
+        </div>
+      </div>
+      <div id="orders-container"></div>
+    </div>
+
+    <!-- Section 3: Verified Certificates -->
+    <div id="sec-certs" style="display:none">
+      <div class="panel-header">
+        <div>
+          <h2>Verified Supplement Batch Certificates</h2>
+          <p>Every genuine supplement verified via scratch hologram code with laboratory batch certificates.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--s);padding:20px;border-radius:14px;border:1.5px solid var(--bd);margin-bottom:24px">
+        <h3 style="font-size:20px;margin-bottom:6px">🛡️ Verify Another Pack Hologram</h3>
+        <p style="color:var(--mu);font-size:14.5px;margin-bottom:12px">Scratch the silver holographic panel on your protein jar and enter the 6-digit code.</p>
+        <div style="display:flex;gap:12px;max-width:500px">
+          <input type="text" id="dash-vc" placeholder="Scratch Code (e.g. PE-123456)" style="flex:1;padding:11px 14px;border:1.5px solid var(--bd);border-radius:8px">
+          <button class="btn-pri" onclick="verifyNewCode()">Verify Certificate</button>
+        </div>
+        <p id="dash-vr" style="margin-top:10px"></p>
+      </div>
+
+      <div id="certs-container">
+        <div class="cert-card">
+          <img class="cert-img" src="https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80" alt="Gold Whey">
+          <div class="cert-info">
+            <span class="cert-badge">✔ 100% AUTHENTIC • LAB CERTIFIED</span>
+            <h3>Gold Whey Protein Concentrate 1kg (Rich Chocolate)</h3>
+            <p style="font-size:14px;color:var(--mu)">Batch No: <b>PE-W24089</b> • Lab Purity: <b>81.4% Pure Protein</b> • FSSAI Lic: 10018022007841</p>
+            <p style="font-size:13px;color:#1e40af;margin-top:4px">Hologram Scratch Code: <code>PE-123456</code> (Verified on 24 Nov 2026)</p>
+          </div>
+          <button class="btn-sub" onclick="alert('Downloading Certificate of Analysis (CoA) PDF for Batch PE-W24089...')">📥 Download CoA</button>
+        </div>
+
+        <div class="cert-card">
+          <img class="cert-img" src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80" alt="Fish Oil">
+          <div class="cert-info">
+            <span class="cert-badge">✔ 100% AUTHENTIC • LAB CERTIFIED</span>
+            <h3>Triple Strength Fish Oil Omega 3 (60 Softgels)</h3>
+            <p style="font-size:14px;color:var(--mu)">Batch No: <b>WL-OM2611</b> • EPA: <b>562mg</b> • DHA: <b>408mg</b> • Mercury Tested: <b>0.00 ppm</b></p>
+            <p style="font-size:13px;color:#1e40af;margin-top:4px">Hologram Scratch Code: <code>PE-892144</code> (Verified on 10 Nov 2026)</p>
+          </div>
+          <button class="btn-sub" onclick="alert('Downloading Certificate of Analysis (CoA) PDF for Batch WL-OM2611...')">📥 Download CoA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Addresses -->
+    <div id="sec-addresses" style="display:none">
+      <div class="panel-header">
+        <div>
+          <h2>Delivery Addresses</h2>
+          <p>Manage your home, office, or gym delivery addresses for express shipping.</p>
+        </div>
+        <button class="btn-pri" onclick="alert('Add New Address form opened')">+ Add New Address</button>
+      </div>
+
+      <div class="address-grid">
+        <div class="addr-card primary">
+          <span style="position:absolute;top:16px;right:16px;background:var(--or);color:#120f0c;font:800 11px 'Barlow Condensed';padding:2px 8px;border-radius:4px">DEFAULT HOME</span>
+          <b>Rahul Sharma</b>
+          <p>Flat 402, Gym Enthusiasts Tower, Link Road<br>Andheri West, Mumbai, Maharashtra - 400053<br>Phone: +91 98765 43210</p>
+          <div style="margin-top:14px;display:flex;gap:10px">
+            <button class="btn-sub" style="padding:6px 14px;font-size:13px">Edit</button>
+          </div>
+        </div>
+
+        <div class="addr-card">
+          <span style="position:absolute;top:16px;right:16px;background:var(--s2);color:var(--tx);font:800 11px 'Barlow Condensed';padding:2px 8px;border-radius:4px">GYM RECEPTION</span>
+          <b>Rahul Sharma (Golds Gym)</b>
+          <p>c/o Golds Gym Reception, 2nd Floor, Crystal Plaza<br>New Link Road, Andheri West, Mumbai - 400053<br>Phone: +91 98765 43210</p>
+          <div style="margin-top:14px;display:flex;gap:10px">
+            <button class="btn-sub" style="padding:6px 14px;font-size:13px">Set As Default</button>
+            <button class="btn-sub" style="padding:6px 14px;font-size:13px">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Wishlist -->
+    <div id="sec-wishlist" style="display:none">
+      <div class="panel-header">
+        <div>
+          <h2>My Saved Wishlist</h2>
+          <p>Supplements you have saved to purchase in upcoming orders.</p>
+        </div>
+        <a href="index.html" class="btn-pri">Browse More Supplements</a>
+      </div>
+      <div id="wishlist-container"></div>
+    </div>
+
+    <!-- Section 6: Settings -->
+    <div id="sec-settings" style="display:none">
+      <div class="panel-header">
+        <div>
+          <h2>Profile & Account Settings</h2>
+          <p>Update personal information, notification preferences and security passwords.</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveProfile(event)" style="max-width:640px">
+        <div class="fg-grid">
+          <div class="fg">
+            <label>Full Name</label>
+            <input type="text" id="prof-name" value="Rahul Sharma" required>
+          </div>
+          <div class="fg">
+            <label>Primary Phone</label>
+            <input type="tel" id="prof-phone" value="+91 98765 43210" required>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email Address</label>
+          <input type="email" id="prof-email" value="rahul.sharma@gmail.com" required>
+        </div>
+        <div class="fg-grid">
+          <div class="fg">
+            <label>Default Pincode</label>
+            <input type="text" id="prof-pin" value="400053" maxlength="6" required>
+          </div>
+          <div class="fg">
+            <label>City</label>
+            <input type="text" id="prof-city" value="Mumbai" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-pri" style="padding:12px 24px;font-size:15px">Save Profile Changes</button>
+      </form>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const inr = n => '₹' + Number(n).toLocaleString('en-IN');
+
+function getUser() {
+  try {
+    return JSON.parse(localStorage.getItem('pe_user')) || {
+      name: 'Rahul Sharma',
+      email: 'rahul.sharma@gmail.com',
+      phone: '+91 98765 43210',
+      city: 'Mumbai',
+      pincode: '400053',
+      loyaltyPoints: 340
+    };
+  } catch(e) {
+    return { name: 'Rahul Sharma', email: 'rahul.sharma@gmail.com', phone: '+91 98765 43210' };
+  }
+}
+
+function getOrders() {
+  try {
+    const list = JSON.parse(localStorage.getItem('pe_orders'));
+    if (list && list.length) return list;
+  } catch(e) {}
+  return [
+    {
+      id: 'PE-884920',
+      date: '24 Nov 2026',
+      items: [
+        { id: 0, name: 'Gold Whey Protein Concentrate', size: '1 kg (2.2 lb)', flavor: 'Rich Chocolate', qty: 1, price: 3349, img: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80' },
+        { id: 6, name: 'Micronised Creatine Monohydrate 200 Mesh', size: '250 g', flavor: 'Unflavoured', qty: 1, price: 649, img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80' }
+      ],
+      subtotal: 3998,
+      discount: 200,
+      total: 3798,
+      payment: 'UPI (GPay / PhonePe)',
+      status: 'Dispatched',
+      carrier: 'BlueDart Express',
+      trackingNumber: 'BD-992184012',
+      address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+      timeline: [
+        { title: 'Order Confirmed', time: '24 Nov, 10:30 AM', done: true },
+        { title: 'Packed at Warehouse', time: '24 Nov, 04:15 PM', done: true },
+        { title: 'In Transit with BlueDart', time: '25 Nov, 09:40 AM', done: true },
+        { title: 'Out for Delivery', time: 'Expected Today by 6 PM', done: false }
+      ],
+      scratchCode: 'PE-123456',
+      verified: true
+    },
+    {
+      id: 'PE-772109',
+      date: '10 Nov 2026',
+      items: [
+        { id: 16, name: 'Triple Strength Fish Oil Omega 3', size: '60 Softgels', flavor: 'Enteric Coated', qty: 2, price: 449, img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80' }
+      ],
+      subtotal: 898,
+      discount: 45,
+      total: 853,
+      payment: 'Credit Card',
+      status: 'Delivered',
+      carrier: 'Delhivery Surface',
+      trackingNumber: 'DLV-48192048',
+      address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+      timeline: [
+        { title: 'Order Confirmed', time: '10 Nov, 02:10 PM', done: true },
+        { title: 'Packed at Warehouse', time: '10 Nov, 06:40 PM', done: true },
+        { title: 'Dispatched', time: '11 Nov, 11:20 AM', done: true },
+        { title: 'Delivered Successfully', time: '13 Nov, 01:15 PM', done: true }
+      ],
+      scratchCode: 'PE-892144',
+      verified: true
+    }
+  ];
+}
+
+function initDashboard() {
+  const u = getUser();
+  document.getElementById('user-display-name').textContent = u.name;
+  document.getElementById('user-avatar').textContent = u.name.charAt(0).toUpperCase();
+  document.getElementById('prof-name').value = u.name;
+  document.getElementById('prof-email').value = u.email;
+  document.getElementById('prof-phone').value = u.phone || '+91 98765 43210';
+  document.getElementById('prof-pin').value = u.pincode || '400053';
+  document.getElementById('prof-city').value = u.city || 'Mumbai';
+  if(document.getElementById('kpi-pts')) {
+    document.getElementById('kpi-pts').textContent = u.loyaltyPoints || 340;
+  }
+
+  const orders = getOrders();
+  document.getElementById('kpi-orders').textContent = orders.length;
+  document.getElementById('order-count-badge').textContent = orders.length;
+
+  renderOrders(orders);
+  renderActiveOrder(orders);
+  renderWishlist();
+}
+
+function renderOrders(orders) {
+  const c = document.getElementById('orders-container');
+  if(!orders.length) {
+    c.innerHTML = '<p style="padding:24px;text-align:center;color:var(--mu)">No orders placed yet.</p>';
+    return;
+  }
+  c.innerHTML = orders.map(o => `
+    <div class="order-card">
+      <div class="order-top">
+        <div class="order-meta">
+          <div><small>ORDER ID</small><b>#${o.id}</b></div>
+          <div><small>DATE PLACED</small><b>${o.date}</b></div>
+          <div><small>TOTAL AMOUNT</small><b>${inr(o.total)}</b></div>
+          <div><small>PAYMENT</small><b>${o.payment}</b></div>
+        </div>
+        <span class="status-badge ${o.status.toLowerCase()}">${o.status}</span>
+      </div>
+
+      <div class="order-body">
+        ${o.items.map(it => `
+          <div class="order-item">
+            <img class="order-thumb" src="${it.img}" alt="${it.name}">
+            <div class="order-item-info">
+              <b>${it.name}</b>
+              <small>Size: ${it.size} • Flavour: ${it.flavor} • Quantity: ${it.qty}</small>
+            </div>
+            <div class="order-item-price">${inr(it.price * it.qty)}</div>
+          </div>
+        `).join('')}
+
+        <!-- Stepper -->
+        <div class="stepper">
+          <div class="stepper-title">Courier Tracking: ${o.carrier} (${o.trackingNumber || 'Tracking Active'})</div>
+          <div class="stepper-steps">
+            ${(o.timeline || []).map((st, idx) => `
+              <div class="stepper-step ${st.done ? 'done' : (idx===2 && o.status==='Dispatched' ? 'active' : '')}">
+                <div class="step-dot">${st.done ? '✓' : idx+1}</div>
+                <b>${st.title}</b>
+                <small>${st.time}</small>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="order-actions">
+          <button class="btn-sub" onclick="alert('Downloading Tax Invoice for Order #${o.id}...')">📄 Download Invoice</button>
+          <button class="btn-pri" onclick="window.location.href='index.html'">Buy Again</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderActiveOrder(orders) {
+  const active = orders.find(o => o.status === 'Dispatched' || o.status === 'Processing') || orders[0];
+  const el = document.getElementById('overview-active-order');
+  if(!active) {
+    el.innerHTML = '<p style="color:var(--mu)">No active shipments currently in transit.</p>';
+    return;
+  }
+  el.innerHTML = `
+    <div class="order-card" style="margin-bottom:0">
+      <div class="order-top">
+        <div class="order-meta">
+          <div><small>ACTIVE SHIPMENT</small><b>#${active.id}</b></div>
+          <div><small>CARRIER</small><b>${active.carrier}</b></div>
+          <div><small>STATUS</small><b style="color:var(--bl)">${active.status}</b></div>
+        </div>
+        <span class="status-badge dispatched">${active.status}</span>
+      </div>
+      <div class="order-body">
+        <div style="font-size:14.5px;color:var(--mu);margin-bottom:12px">
+          Destination: <b>${active.address}</b>
+        </div>
+        <div class="stepper">
+          <div class="stepper-steps">
+            ${(active.timeline || []).map((st, idx) => `
+              <div class="stepper-step ${st.done ? 'done' : (idx===2 ? 'active' : '')}">
+                <div class="step-dot">${st.done ? '✓' : idx+1}</div>
+                <b>${st.title}</b>
+                <small>${st.time}</small>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderWishlist() {
+  const c = document.getElementById('wishlist-container');
+  let wl = [];
+  try { wl = JSON.parse(localStorage.getItem('pe_wl')) || []; } catch(e){}
+  if(!wl.length) {
+    c.innerHTML = '<p style="padding:24px;text-align:center;color:var(--mu);font-size:15px">You haven\'t saved any supplements to your wishlist yet. Explore the storefront and tap the heart icon on any product.</p>';
+    return;
+  }
+  c.innerHTML = `<p style="color:var(--mu);margin-bottom:16px">You have <b>${wl.length}</b> items saved in your wishlist.</p><a href="index.html" class="btn-pri">Open Storefront to View Wishlist</a>`;
+}
+
+function showSection(id) {
+  const secs = ['overview', 'orders', 'certs', 'addresses', 'wishlist', 'settings'];
+  secs.forEach(s => {
+    const el = document.getElementById('sec-' + s);
+    if(el) el.style.display = (s === id ? 'block' : 'none');
+  });
+
+  const items = document.querySelectorAll('.nav-item');
+  items.forEach(it => {
+    if(it.textContent.toLowerCase().includes(id)) {
+      it.classList.add('active');
+    } else {
+      it.classList.remove('active');
+    }
+  });
+}
+
+function verifyNewCode() {
+  const inp = document.getElementById('dash-vc');
+  const res = document.getElementById('dash-vr');
+  const v = (inp.value || '').trim().toUpperCase();
+  if(!v) {
+    res.innerHTML = '<b style="color:var(--rd)">Please enter a valid 6-digit scratch code.</b>';
+    return;
+  }
+  if(/^PE-\d{6}$/.test(v) || v === 'PE-123456') {
+    res.innerHTML = '<b style="color:var(--gr)">✔ Hologram Authenticated! Batch Lab Analysis: 99.8% Purity. Certificate added to your list below.</b>';
+  } else {
+    res.innerHTML = '<b style="color:var(--rd)">✕ Code not recognized. Please check the code printed beneath the silver scratch hologram or contact support.</b>';
+  }
+}
+
+function handleSaveProfile(e) {
+  e.preventDefault();
+  const u = getUser();
+  u.name = document.getElementById('prof-name').value.trim();
+  u.email = document.getElementById('prof-email').value.trim();
+  u.phone = document.getElementById('prof-phone').value.trim();
+  u.pincode = document.getElementById('prof-pin').value.trim();
+  u.city = document.getElementById('prof-city').value.trim();
+  localStorage.setItem('pe_user', JSON.stringify(u));
+  document.getElementById('user-display-name').textContent = u.name;
+  document.getElementById('user-avatar').textContent = u.name.charAt(0).toUpperCase();
+  alert('Profile updated successfully!');
+}
+
+function logout() {
+  if(confirm('Are you sure you want to log out of your Customer Account?')) {
+    localStorage.removeItem('pe_user');
+    window.location.href = 'customer-login.html';
+  }
+}
+
+initDashboard();
+</script>
+
+</body>
+</html>

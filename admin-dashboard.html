@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Merchant Admin Console – Protein Emporium</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tx: #14110e;
+  --mu: #645d51;
+  --bd: #e4dfd4;
+  --s: #f8f6f2;
+  --s2: #ede8df;
+  --or: #f58a07;
+  --or-dk: #d97400;
+  --or-lt: #fff6eb;
+  --bk: #120f0c;
+  --gr: #15803d;
+  --gr-lt: #eef9f1;
+  --bl: #2563eb;
+  --bl-lt: #eff6ff;
+  --rd: #dc2626;
+  --card-rd: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font: 15px/1.55 'Barlow', system-ui, -apple-system, sans-serif;
+  background: #f5f3ee;
+  color: var(--tx);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1,h2,h3,h4,.dsp{
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit;background:none;border:0}
+input,select{font:inherit}
+
+/* Header */
+.admin-nav{
+  background: #181410;
+  color: #fff;
+  border-bottom: 2px solid var(--or);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+.admin-nav .w{
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand-group{display:flex;align-items:center;gap:16px}
+.brand-group img{height:46px;width:auto;object-fit:contain}
+.admin-tag{
+  background: rgba(245,138,7,0.25);
+  color: var(--or);
+  border: 1px solid var(--or);
+  font: 800 11.5px 'Barlow Condensed';
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+.store-status{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #86efac;
+  background: rgba(22,163,74,0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(22,163,74,0.3);
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+.nav-actions{display:flex;align-items:center;gap:14px}
+.btn-open-store{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--or);
+  color: #120f0c;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.btn-open-store:hover{background:var(--or-dk)}
+.btn-logout{
+  color: #f87171;
+  border: 1px solid #7f1d1d;
+  background: rgba(239,68,68,0.1);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.btn-logout:hover{background:#ef4444;color:#fff}
+
+/* Main Layout */
+.layout{
+  max-width: 1400px;
+  width: 100%;
+  margin: 24px auto;
+  padding: 0 24px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Sidebar */
+.sidebar{
+  background: #fff;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--card-rd);
+  padding: 18px 14px;
+}
+.sidebar-title{
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--mu);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 12px 10px 8px;
+}
+.side-item{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--mu);
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.side-item:hover{background:var(--s);color:var(--tx)}
+.side-item.active{
+  background: #181410;
+  color: #fff;
+}
+.side-item.active span{color:var(--or)}
+.badge{
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--s2);
+}
+.badge.orange{background:var(--or);color:#120f0c}
+
+/* Content Area */
+.panel{
+  background: #fff;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--card-rd);
+  padding: 28px;
+}
+.panel-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--bd);
+}
+.panel-top h2{font-size:28px;text-transform:uppercase}
+.panel-top p{color:var(--mu);font-size:14px;margin-top:2px}
+
+/* Metric Cards */
+.metric-row{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.metric-card{
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.metric-title{font-size:13px;font-weight:700;color:var(--mu)}
+.metric-val{font-size:32px;font-family:'Barlow Condensed';font-weight:800;margin:6px 0 2px}
+.metric-sub{font-size:12px;font-weight:700}
+.metric-sub.up{color:var(--gr)}
+.metric-sub.alert{color:var(--or-dk)}
+
+/* Tables */
+.table-wrap{
+  overflow-x: auto;
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+th{
+  background: var(--s);
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--mu);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1.5px solid var(--bd);
+}
+td{
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--bd);
+  vertical-align: middle;
+}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:#faf8f5}
+
+.order-badge{
+  font: 800 11px 'Barlow Condensed';
+  padding: 3px 8px;
+  border-radius: 5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.order-badge.processing{background:#fef3c7;color:#92400e}
+.order-badge.dispatched{background:#dbeafe;color:#1e40af}
+.order-badge.delivered{background:#dcfce7;color:#166534}
+
+.status-select{
+  padding: 6px 10px;
+  border: 1.5px solid var(--bd);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: #fff;
+  cursor: pointer;
+}
+.status-select:focus{outline:none;border-color:var(--or)}
+
+/* Search & Filters Bar */
+.filter-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.search-input{
+  padding: 9px 14px;
+  border: 1.5px solid var(--bd);
+  border-radius: 8px;
+  font-size: 14px;
+  width: 320px;
+  background: var(--s);
+}
+.search-input:focus{outline:none;border-color:var(--or);background:#fff}
+
+.btn-primary{
+  background: var(--or);
+  color: #120f0c;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary:hover{background:var(--or-dk)}
+
+.prod-thumb{
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--bd);
+  background: #fff;
+  object-fit: contain;
+  padding: 2px;
+}
+
+/* Generator Box */
+.gen-box{
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+.gen-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
+.gen-box label{display:block;font-size:12.5px;font-weight:700;color:var(--mu);margin-bottom:6px}
+.gen-box input, .gen-box select{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--bd);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+@media(max-width:1050px){
+  .layout{grid-template-columns:1fr}
+  .metric-row{grid-template-columns:1fr 1fr}
+  .gen-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .metric-row{grid-template-columns:1fr}
+  .admin-nav .w{height:auto;padding:12px 18px;flex-direction:column;gap:10px}
+  .brand-group{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<header class="admin-nav">
+  <div class="w">
+    <div class="brand-group">
+      <img src="assets/logo.png" alt="Protein Emporium">
+      <span class="admin-tag">MERCHANT ADMIN CONSOLE</span>
+      <div class="store-status">
+        <span class="live-dot"></span>
+        <span>Storefront Online</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <a href="index.html" class="btn-open-store" target="_blank" title="View customer-facing storefront in new tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+        <span>View Storefront</span>
+      </a>
+
+      <span style="font-size:13.5px;color:#d5cdc2">Admin: <b>Vikram Rathore</b></span>
+
+      <button class="btn-logout" onclick="adminLogout()">Exit Console</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Store Management</div>
+    <div class="side-item active" onclick="showTab('overview')">
+      <span>📊</span> Dashboard Overview
+    </div>
+    <div class="side-item" onclick="showTab('orders')">
+      <span>📦</span> Orders & Dispatch
+      <span class="badge orange" id="badge-orders">2</span>
+    </div>
+    <div class="side-item" onclick="showTab('products')">
+      <span>🏷️</span> Products & Stock
+      <span class="badge">28</span>
+    </div>
+    <div class="side-item" onclick="showTab('hologram')">
+      <span>🛡️</span> Scratch Codes & CoAs
+      <span class="badge">Verified</span>
+    </div>
+    <div class="side-item" onclick="showTab('customers')">
+      <span>👥</span> Customer Directory
+    </div>
+    <div class="side-item" onclick="showTab('analytics')">
+      <span>📈</span> Sales Analytics
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="panel">
+
+    <!-- Tab 1: Overview -->
+    <div id="tab-overview">
+      <div class="panel-top">
+        <div>
+          <h2>Store Executive Summary</h2>
+          <p>Real-time metrics, order fulfillments, and revenue statistics.</p>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--mu)" id="live-clock">Updated just now</div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="metric-title">TOTAL REVENUE (NOV 2026)</div>
+          <div class="metric-val" style="color:var(--gr)">₹4,82,350</div>
+          <div class="metric-sub up">▲ +18.4% vs last month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">TOTAL ORDERS</div>
+          <div class="metric-val" id="metric-total-orders">142</div>
+          <div class="metric-sub up">▲ 8 pending dispatch</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">ACTIVE CATALOG SKUS</div>
+          <div class="metric-val">28 Products</div>
+          <div class="metric-sub alert">● 3 Low Stock Items</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">SCRATCH CODES VERIFIED</div>
+          <div class="metric-val" style="color:var(--or-dk)">312 Packs</div>
+          <div class="metric-sub up">✔ Zero fake incident reports</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <h3 style="font-size:20px">Recent Customer Orders</h3>
+        <button class="btn-primary" onclick="showTab('orders')">Manage All Orders ›</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="recent-orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="recent-orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 2: Orders Manager -->
+    <div id="tab-orders" style="display:none">
+      <div class="panel-top">
+        <div>
+          <h2>Customer Orders & Dispatch Center</h2>
+          <p>Update order shipment milestones (Dispatched, Delivered) in real-time.</p>
+        </div>
+        <button class="btn-primary" onclick="simulateNewOrder()">+ Simulate Test Customer Order</button>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" class="search-input" placeholder="Search by Order ID, customer, city..." id="order-search" oninput="filterOrders()">
+        <div style="display:flex;gap:8px">
+          <button class="btn-primary" style="background:var(--s);color:var(--tx);border:1px solid var(--bd)" onclick="filterStatus('all')">All</button>
+          <button class="btn-primary" style="background:var(--s);color:var(--tx);border:1px solid var(--bd)" onclick="filterStatus('Processing')">Processing</button>
+          <button class="btn-primary" style="background:var(--s);color:var(--tx);border:1px solid var(--bd)" onclick="filterStatus('Dispatched')">Dispatched</button>
+          <button class="btn-primary" style="background:var(--s);color:var(--tx);border:1px solid var(--bd)" onclick="filterStatus('Delivered')">Delivered</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer & Shipping Address</th>
+              <th>Items Ordered</th>
+              <th>Total (INR)</th>
+              <th>Payment</th>
+              <th>Dispatch Status (Live Change)</th>
+            </tr>
+          </thead>
+          <tbody id="full-orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 3: Products & Inventory -->
+    <div id="tab-products" style="display:none">
+      <div class="panel-top">
+        <div>
+          <h2>Products Catalog & Inventory (28 SKUs)</h2>
+          <p>Manage pricing, stock counts, and brand certifications across all categories.</p>
+        </div>
+        <button class="btn-primary" onclick="alert('Add New Product dialog: Fill in title, brand, category, price, MRP, and product image URL.')">+ Add New Product SKU</button>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" class="search-input" placeholder="Search product name, brand, category..." id="prod-search" oninput="filterProducts()">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product Image</th>
+              <th>Product Title & Brand</th>
+              <th>Category</th>
+              <th>Selling Price</th>
+              <th>MRP</th>
+              <th>Stock Status</th>
+              <th>Rating</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 4: Hologram & Scratch Codes -->
+    <div id="tab-hologram" style="display:none">
+      <div class="panel-top">
+        <div>
+          <h2>Authenticity Hologram & Scratch Codes Generator</h2>
+          <p>Generate authentic scratch codes for newly manufactured supplement batches.</p>
+        </div>
+      </div>
+
+      <div class="gen-box">
+        <h3 style="font-size:18px;margin-bottom:12px">⚡ Issue New Batch Hologram Scratch Codes</h3>
+        <div class="gen-grid">
+          <div>
+            <label>Product Variant</label>
+            <select id="gen-prod">
+              <option>Gold Whey Protein Concentrate 1kg</option>
+              <option>BioAbsorb Whey Protein Isolate 1kg</option>
+              <option>Micronised Creatine Monohydrate 200 Mesh</option>
+              <option>Triple Strength Fish Oil Omega 3</option>
+              <option>RageX Explosive Pre-Workout 300g</option>
+            </select>
+          </div>
+          <div>
+            <label>Batch Number</label>
+            <input type="text" id="gen-batch" value="PE-NOV26-B8">
+          </div>
+          <div>
+            <label>Lab Purity Score (%)</label>
+            <input type="text" id="gen-score" value="82.4% Pure Protein">
+          </div>
+          <div>
+            <button class="btn-primary" onclick="generateBatchCodes()">Generate Scratch Code</button>
+          </div>
+        </div>
+        <div id="gen-result" style="margin-top:14px;font-weight:700"></div>
+      </div>
+
+      <h3 style="font-size:20px;margin-bottom:14px">Active Holographic Verification Logs</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Scratch Hologram Code</th>
+              <th>Product Name</th>
+              <th>Batch Number</th>
+              <th>Lab CoA Status</th>
+              <th>Customer Verification Count</th>
+              <th>FSSAI Authorization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b style="color:var(--or-dk)">PE-123456</b></td>
+              <td>Gold Whey Protein Concentrate 1kg</td>
+              <td>PE-W24089</td>
+              <td><span class="order-badge delivered">PASSED (81.4% Protein)</span></td>
+              <td>12 Verifications</td>
+              <td>10018022007841</td>
+            </tr>
+            <tr>
+              <td><b style="color:var(--or-dk)">PE-892144</b></td>
+              <td>Triple Strength Fish Oil Omega 3</td>
+              <td>WL-OM2611</td>
+              <td><span class="order-badge delivered">PASSED (562mg EPA)</span></td>
+              <td>9 Verifications</td>
+              <td>10019011005423</td>
+            </tr>
+            <tr>
+              <td><b style="color:var(--or-dk)">PE-654321</b></td>
+              <td>Micronised Creatine Monohydrate 200 Mesh</td>
+              <td>CR-200M-44</td>
+              <td><span class="order-badge delivered">PASSED (99.9% Pure)</span></td>
+              <td>31 Verifications</td>
+              <td>10020044009112</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 5: Customers Directory -->
+    <div id="tab-customers" style="display:none">
+      <div class="panel-top">
+        <div>
+          <h2>Registered Customers Directory</h2>
+          <p>Verified fitness customer accounts, delivery history, and lifetime order values.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>Email</th>
+              <th>Mobile Phone</th>
+              <th>City & Pincode</th>
+              <th>Lifetime Orders</th>
+              <th>Total Spend</th>
+              <th>Member Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Rahul Sharma</b></td>
+              <td>rahul.sharma@gmail.com</td>
+              <td>+91 98765 43210</td>
+              <td>Mumbai - 400053</td>
+              <td>2 Orders</td>
+              <td>₹4,651</td>
+              <td><span class="order-badge delivered">GOLD TIER</span></td>
+            </tr>
+            <tr>
+              <td><b>Arpit Verma</b></td>
+              <td>arpit.fitness@yahoo.com</td>
+              <td>+91 98221 10092</td>
+              <td>Pune - 411004</td>
+              <td>5 Orders</td>
+              <td>₹16,420</td>
+              <td><span class="order-badge delivered">PLATINUM VIP</span></td>
+            </tr>
+            <tr>
+              <td><b>Chinmay Deshmukh</b></td>
+              <td>chinmay.crossfit@gmail.com</td>
+              <td>+91 97665 44321</td>
+              <td>Nagpur - 440010</td>
+              <td>3 Orders</td>
+              <td>₹8,920</td>
+              <td><span class="order-badge delivered">GOLD TIER</span></td>
+            </tr>
+            <tr>
+              <td><b>Priyanka Mehra</b></td>
+              <td>priyanka.m@gmail.com</td>
+              <td>+91 99100 88214</td>
+              <td>Delhi NCR - 110016</td>
+              <td>4 Orders</td>
+              <td>₹12,850</td>
+              <td><span class="order-badge delivered">PLATINUM VIP</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 6: Sales Analytics -->
+    <div id="tab-analytics" style="display:none">
+      <div class="panel-top">
+        <div>
+          <h2>Category Performance & Revenue Breakdown</h2>
+          <p>Sales distribution across supplement lines and customer fulfillment channels.</p>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="metric-title">WHEY PROTEIN LINE</div>
+          <div class="metric-val" style="color:var(--or-dk)">₹2,21,800</div>
+          <div class="metric-sub up">46% of Total Store Sales</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">CREATINE LINE</div>
+          <div class="metric-val" style="color:var(--bl)">₹1,06,120</div>
+          <div class="metric-sub up">22% of Total Store Sales</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">PRE-WORKOUT</div>
+          <div class="metric-val">₹67,530</div>
+          <div class="metric-sub">14% of Total Store Sales</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">DAILY VITAMINS & FOODS</div>
+          <div class="metric-val">₹86,900</div>
+          <div class="metric-sub">18% of Total Store Sales</div>
+        </div>
+      </div>
+
+      <div style="background:var(--s);padding:22px;border-radius:12px;border:1.5px solid var(--bd)">
+        <h3 style="font-size:20px;margin-bottom:12px">Payment Mode Distribution</h3>
+        <p style="color:var(--mu);margin-bottom:10px">UPI (GPay / PhonePe / Paytm): <b>64%</b> • Credit/Debit Cards: <b>24%</b> • Cash on Delivery (COD): <b>12%</b></p>
+        <p style="color:var(--mu)">Coupon Codes Applied: <b>PROTEIN5 (78 uses)</b> • <b>FIRST10 (42 uses)</b></p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const inr = n => '₹' + Number(n).toLocaleString('en-IN');
+
+// Seed orders if not present
+function getAdminOrders() {
+  try {
+    const list = JSON.parse(localStorage.getItem('pe_orders'));
+    if (list && list.length) return list;
+  } catch(e) {}
+  return [
+    {
+      id: 'PE-884920',
+      date: '24 Nov 2026',
+      customer: 'Rahul Sharma',
+      city: 'Mumbai, MH',
+      items: [
+        { id: 0, name: 'Gold Whey Protein Concentrate', size: '1 kg', flavor: 'Rich Chocolate', qty: 1, price: 3349, img: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80' },
+        { id: 6, name: 'Micronised Creatine Monohydrate 200 Mesh', size: '250 g', flavor: 'Unflavoured', qty: 1, price: 649, img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80' }
+      ],
+      total: 3798,
+      payment: 'UPI',
+      status: 'Dispatched',
+      carrier: 'BlueDart Express',
+      address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai - 400053'
+    },
+    {
+      id: 'PE-772109',
+      date: '10 Nov 2026',
+      customer: 'Rahul Sharma',
+      city: 'Mumbai, MH',
+      items: [
+        { id: 16, name: 'Triple Strength Fish Oil Omega 3', size: '60 Softgels', flavor: 'Enteric Coated', qty: 2, price: 449, img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80' }
+      ],
+      total: 853,
+      payment: 'Credit Card',
+      status: 'Delivered',
+      carrier: 'Delhivery Surface',
+      address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai - 400053'
+    },
+    {
+      id: 'PE-661042',
+      date: '25 Nov 2026',
+      customer: 'Arpit Verma',
+      city: 'Pune, MH',
+      items: [
+        { id: 7, name: 'Creapure® German Creatine', size: '250 g', flavor: 'Unflavoured', qty: 2, price: 949, img: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=600&q=80' }
+      ],
+      total: 1898,
+      payment: 'UPI',
+      status: 'Processing',
+      carrier: 'BlueDart Express',
+      address: 'Shop 12, FC Road, Shivaji Nagar, Pune - 411004'
+    }
+  ];
+}
+
+const PRODUCTS_CATALOG = [
+  { id: 0, name: "Gold Whey Protein Concentrate", cat: "Whey Protein", brand: "Emporium Labs", price: 3349, mrp: 3999, stock: "In Stock (42 units)", rate: 4.8, img: "https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80" },
+  { id: 1, name: "BioAbsorb Whey Protein Isolate", cat: "Whey Protein", brand: "Emporium Labs", price: 3899, mrp: 4699, stock: "In Stock (18 units)", rate: 4.7, img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80" },
+  { id: 2, name: "Pure Whey Protein Isolate 90%", cat: "Whey Protein", brand: "Emporium Labs", price: 3999, mrp: 5499, stock: "In Stock (29 units)", rate: 4.9, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Container_of_Protein_Powder.jpg/640px-Container_of_Protein_Powder.jpg" },
+  { id: 6, name: "Micronised Creatine Monohydrate", cat: "Creatine", brand: "Emporium Labs", price: 649, mrp: 999, stock: "In Stock (84 units)", rate: 4.9, img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80" },
+  { id: 7, name: "Creapure® German Creatine", cat: "Creatine", brand: "IronCore", price: 949, mrp: 1499, stock: "Low Stock (4 units)", rate: 4.8, img: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=600&q=80" },
+  { id: 9, name: "RageX Explosive Pre-Workout", cat: "Pre Workout", brand: "Emporium Labs", price: 1199, mrp: 1799, stock: "In Stock (35 units)", rate: 4.6, img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80" },
+  { id: 14, name: "Anabolic Bulk Mass Gainer 1:3", cat: "Gainers", brand: "BulkMax", price: 2499, mrp: 3299, stock: "In Stock (22 units)", rate: 4.7, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Optimus_nutritiongold_standard_whey_protein_%282%29.jpg/640px-Optimus_nutritiongold_standard_whey_protein_%282%29.jpg" },
+  { id: 16, name: "Triple Strength Fish Oil Omega 3", cat: "Vitamins", brand: "Wellora", price: 449, mrp: 599, stock: "In Stock (110 units)", rate: 4.9, img: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80" },
+  { id: 23, name: "All-Natural Crunchy Peanut Butter", cat: "Health Food", brand: "Emporium Foods", price: 329, mrp: 449, stock: "In Stock (65 units)", rate: 4.9, img: "https://images.unsplash.com/photo-1587393855524-087f83d95bc9?auto=format&fit=crop&w=600&q=80" }
+];
+
+let ordersData = getAdminOrders();
+
+function initAdmin() {
+  renderOverviewTable();
+  renderFullOrdersTable(ordersData);
+  renderProductsTable(PRODUCTS_CATALOG);
+}
+
+function showTab(id) {
+  const tabs = ['overview', 'orders', 'products', 'hologram', 'customers', 'analytics'];
+  tabs.forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if(el) el.style.display = (t === id ? 'block' : 'none');
+  });
+
+  const items = document.querySelectorAll('.side-item');
+  items.forEach(it => {
+    if(it.textContent.toLowerCase().includes(id)) {
+      it.classList.add('active');
+    } else {
+      it.classList.remove('active');
+    }
+  });
+}
+
+function renderOverviewTable() {
+  const tbody = document.getElementById('recent-orders-tbody');
+  tbody.innerHTML = ordersData.slice(0, 5).map(o => `
+    <tr>
+      <td><b>#${o.id}</b></td>
+      <td>${o.customer || 'Customer'}</td>
+      <td>${o.items.map(i => i.name).join(', ')}</td>
+      <td><b>${inr(o.total)}</b></td>
+      <td>${o.payment}</td>
+      <td><span class="order-badge ${o.status.toLowerCase()}">${o.status}</span></td>
+      <td><button style="color:var(--or-dk);font-weight:700" onclick="showTab('orders')">Update Status ›</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderFullOrdersTable(data) {
+  const tbody = document.getElementById('full-orders-tbody');
+  tbody.innerHTML = data.map((o, idx) => `
+    <tr>
+      <td><b>#${o.id}</b></td>
+      <td>${o.date}</td>
+      <td>
+        <b>${o.customer || 'Rahul Sharma'}</b><br>
+        <small style="color:var(--mu)">${o.address || o.city || 'Mumbai'}</small>
+      </td>
+      <td>
+        ${o.items.map(it => `
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <img src="${it.img}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;border:1px solid var(--bd)">
+            <span>${it.name} (${it.qty}x)</span>
+          </div>
+        `).join('')}
+      </td>
+      <td><b style="font-size:15px">${inr(o.total)}</b></td>
+      <td>${o.payment}</td>
+      <td>
+        <select class="status-select" onchange="updateOrderStatus('${o.id}', this.value)">
+          <option value="Processing" ${o.status==='Processing'?'selected':''}>🟡 Processing</option>
+          <option value="Dispatched" ${o.status==='Dispatched'?'selected':''}>🔵 Dispatched (In Transit)</option>
+          <option value="Delivered" ${o.status==='Delivered'?'selected':''}>🟢 Delivered</option>
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function updateOrderStatus(id, newStatus) {
+  const order = ordersData.find(o => o.id === id);
+  if(order) {
+    order.status = newStatus;
+    localStorage.setItem('pe_orders', JSON.stringify(ordersData));
+    alert('Order #' + id + ' status updated to "' + newStatus + '". Customer dashboard will now show this live update.');
+    renderOverviewTable();
+  }
+}
+
+function filterOrders() {
+  const q = document.getElementById('order-search').value.toLowerCase();
+  const filtered = ordersData.filter(o => 
+    o.id.toLowerCase().includes(q) ||
+    (o.customer || '').toLowerCase().includes(q) ||
+    (o.address || '').toLowerCase().includes(q)
+  );
+  renderFullOrdersTable(filtered);
+}
+
+function filterStatus(st) {
+  if(st === 'all') {
+    renderFullOrdersTable(ordersData);
+  } else {
+    renderFullOrdersTable(ordersData.filter(o => o.status === st));
+  }
+}
+
+function simulateNewOrder() {
+  const newId = 'PE-' + Math.floor(100000 + Math.random() * 900000);
+  const sample = {
+    id: newId,
+    date: 'Just Now',
+    customer: 'Yatharth Sharma',
+    city: 'New Delhi',
+    items: [
+      { id: 1, name: 'BioAbsorb Whey Protein Isolate', size: '1 kg', flavor: 'Milk Chocolate', qty: 1, price: 3899, img: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80' }
+    ],
+    total: 3899,
+    payment: 'UPI',
+    status: 'Processing',
+    carrier: 'BlueDart Express',
+    address: 'Sector 14, Rohini, New Delhi - 110085'
+  };
+  ordersData.unshift(sample);
+  localStorage.setItem('pe_orders', JSON.stringify(ordersData));
+  document.getElementById('badge-orders').textContent = ordersData.length;
+  renderOverviewTable();
+  renderFullOrdersTable(ordersData);
+  alert('New simulated order #' + newId + ' created and placed into queue!');
+}
+
+function renderProductsTable(prods) {
+  const tbody = document.getElementById('products-tbody');
+  tbody.innerHTML = prods.map(p => `
+    <tr>
+      <td><img src="${p.img}" class="prod-thumb"></td>
+      <td>
+        <b>${p.name}</b><br>
+        <small style="color:var(--mu)">Brand: ${p.brand}</small>
+      </td>
+      <td><span style="font-weight:700;color:var(--mu)">${p.cat}</span></td>
+      <td><b style="color:var(--tx);font-size:15px">${inr(p.price)}</b></td>
+      <td><s style="color:var(--mu)">${inr(p.mrp)}</s></td>
+      <td>
+        <span class="order-badge ${p.stock.includes('Low')?'processing':'delivered'}">${p.stock}</span>
+      </td>
+      <td>★ ${p.rate}</td>
+      <td>
+        <button style="color:var(--or-dk);font-weight:700" onclick="editProductPrice(${p.id})">Edit Price</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function editProductPrice(id) {
+  const p = PRODUCTS_CATALOG.find(x => x.id === id);
+  if(!p) return;
+  const np = prompt('Enter new selling price for ' + p.name + ' (Current: ₹' + p.price + '):', p.price);
+  if(np && !isNaN(np)) {
+    p.price = Number(np);
+    renderProductsTable(PRODUCTS_CATALOG);
+    alert('Price updated to ₹' + p.price);
+  }
+}
+
+function filterProducts() {
+  const q = document.getElementById('prod-search').value.toLowerCase();
+  const filtered = PRODUCTS_CATALOG.filter(p => 
+    p.name.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q) ||
+    p.cat.toLowerCase().includes(q)
+  );
+  renderProductsTable(filtered);
+}
+
+function generateBatchCodes() {
+  const prod = document.getElementById('gen-prod').value;
+  const batch = document.getElementById('gen-batch').value;
+  const score = document.getElementById('gen-score').value;
+  const code = 'PE-' + Math.floor(100000 + Math.random() * 900000);
+  document.getElementById('gen-result').innerHTML = `
+    <div style="background:#fff;border:1.5px solid var(--gr);padding:14px;border-radius:8px;color:var(--gr)">
+      ✔ Scratch Hologram Code Issued: <b style="font-size:17px;color:#120f0c">${code}</b><br>
+      <small style="color:var(--mu)">Assigned to: ${prod} • Batch: ${batch} • Lab CoA: ${score}</small><br>
+      <span style="font-size:12px;color:var(--bl)">This code is now live and can be authenticated on the customer portal & storefront.</span>
+    </div>
+  `;
+}
+
+function adminLogout() {
+  if(confirm('Log out from Admin Management Console?')) {
+    localStorage.removeItem('pe_admin_auth');
+    window.location.href = 'admin-login.html';
+  }
+}
+
+initAdmin();
+</script>
+
+</body>
+</html>

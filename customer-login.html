@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Customer Login & Register – Protein Emporium</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tx: #14110e;
+  --mu: #645d51;
+  --bd: #e4dfd4;
+  --s: #f8f6f2;
+  --s2: #ede8df;
+  --or: #f58a07;
+  --or-dk: #d97400;
+  --or-lt: #fff6eb;
+  --bk: #120f0c;
+  --gr: #15803d;
+  --gr-lt: #eef9f1;
+  --rd: #dc2626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font: 16px/1.55 'Barlow', system-ui, -apple-system, sans-serif;
+  background: #fbf9f5;
+  color: var(--tx);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1,h2,h3,h4,.dsp{
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit;background:none;border:0}
+input{font:inherit}
+
+.top-nav{
+  background: #fff;
+  border-bottom: 1.5px solid var(--bd);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:52px;width:auto;object-fit:contain}
+.back-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mu);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid var(--bd);
+  background: var(--s);
+  transition: all 0.2s;
+}
+.back-link:hover{border-color:var(--or);color:var(--or-dk);background:var(--or-lt)}
+
+.auth-container{
+  flex: 1;
+  max-width: 490px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.auth-card{
+  background: #fff;
+  border: 1.5px solid var(--bd);
+  border-radius: 18px;
+  padding: 36px 32px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+}
+.auth-header{text-align:center;margin-bottom:28px}
+.auth-header img{height:68px;width:auto;margin-bottom:12px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.1))}
+.auth-header h1{font-size:32px;text-transform:uppercase;color:var(--bk)}
+.auth-header p{color:var(--mu);font-size:15px;margin-top:4px}
+
+.tabs{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--s);
+  border: 1.5px solid var(--bd);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 26px;
+}
+.tab-btn{
+  padding: 10px 16px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 15.5px;
+  border-radius: 8px;
+  color: var(--mu);
+  transition: all 0.2s;
+}
+.tab-btn.active{
+  background: #fff;
+  color: var(--bk);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.fg{margin-bottom:18px}
+.fg label{display:block;font-weight:700;font-size:14px;color:var(--tx);margin-bottom:6px}
+.fg input{
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--bd);
+  border-radius: 10px;
+  font-size: 15px;
+  background: var(--s);
+  transition: all 0.2s;
+}
+.fg input:focus{
+  outline: none;
+  border-color: var(--or);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(245,138,7,0.18);
+}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.remember-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+.remember-row label{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--mu);font-weight:600}
+.remember-row a{color:var(--or-dk);font-weight:700}
+.remember-row a:hover{text-decoration:underline}
+
+.btn-submit{
+  width: 100%;
+  background: var(--or);
+  color: #120f0c;
+  font-weight: 800;
+  font-size: 16px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px rgba(245,138,7,0.4);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-submit:hover{background:var(--or-dk);transform:translateY(-1px)}
+
+.demo-box{
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--or-lt);
+  border: 1.5px dashed var(--or);
+  border-radius: 12px;
+  text-align: center;
+}
+.demo-box p{font-size:13.5px;color:var(--or-dk);font-weight:600;margin-bottom:10px}
+.demo-btn{
+  background: #fff;
+  border: 1.5px solid var(--or);
+  color: var(--or-dk);
+  font-weight: 800;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.demo-btn:hover{background:var(--or);color:#120f0c}
+
+.trust-badges{
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--bd);
+  font-size: 13px;
+  color: var(--mu);
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+.trust-badges span{display:inline-flex;align-items:center;gap:6px}
+
+.admin-switch{
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--mu);
+}
+.admin-switch a{color:var(--or-dk);font-weight:700}
+.admin-switch a:hover{text-decoration:underline}
+
+.alert{
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  display: none;
+}
+.alert.error{background:#fee2e2;color:#991b1b;border:1px solid #f87171}
+.alert.success{background:#dcfce7;color:#166534;border:1px solid #86efac}
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <a href="index.html" class="brand">
+    <img src="assets/logo.png" alt="Protein Emporium">
+  </a>
+  <a href="index.html" class="back-link">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+    Back to Storefront
+  </a>
+</header>
+
+<main class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <img src="assets/logo.png" alt="Protein Emporium">
+      <h1 id="title-text">Customer Portal</h1>
+      <p id="sub-text">Access your orders, track shipments & verify supplements</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <div id="alert-box" class="alert"></div>
+
+    <!-- Login Form -->
+    <form id="form-login" onsubmit="handleLogin(event)">
+      <div class="fg">
+        <label>Email Address or Mobile Number</label>
+        <input type="text" id="login-email" placeholder="e.g. rahul.sharma@gmail.com" required value="rahul.sharma@gmail.com">
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="••••••••" required value="fitness2026">
+      </div>
+      <div class="remember-row">
+        <label>
+          <input type="checkbox" checked> Remember me
+        </label>
+        <a href="javascript:void(0)" onclick="alert('Password reset link sent to registered email!')">Forgot Password?</a>
+      </div>
+      <button type="submit" class="btn-submit">
+        <span>Sign In to Dashboard</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+      <div class="demo-box">
+        <p>⚡ Quick Test Mode: Click below to instantly log in as a test customer</p>
+        <button type="button" class="demo-btn" onclick="demoLogin()">Instant Demo Customer Login</button>
+      </div>
+    </form>
+
+    <!-- Register Form -->
+    <form id="form-register" style="display:none" onsubmit="handleRegister(event)">
+      <div class="fg">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Rahul Sharma" required>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>Email Address</label>
+          <input type="email" id="reg-email" placeholder="rahul@example.com" required>
+        </div>
+        <div class="fg">
+          <label>Phone Number</label>
+          <input type="tel" id="reg-phone" placeholder="9876543210" required>
+        </div>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>Password</label>
+          <input type="password" id="reg-pass" placeholder="Create password" required>
+        </div>
+        <div class="fg">
+          <label>Delivery Pincode</label>
+          <input type="text" id="reg-pin" placeholder="6-digit PIN" maxlength="6" required>
+        </div>
+      </div>
+      <div class="remember-row">
+        <label>
+          <input type="checkbox" checked required> I agree to Genuine Purity & Safety terms
+        </label>
+      </div>
+      <button type="submit" class="btn-submit">
+        <span>Create Customer Account</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </form>
+
+    <div class="trust-badges">
+      <span>🛡️ 100% Brand Guarantee</span>
+      <span>🔒 256-Bit SSL Encrypted</span>
+      <span>🚚 Express Live Tracking</span>
+    </div>
+
+    <div class="admin-switch">
+      Are you a store manager or administrator? <a href="admin-login.html">Login to Admin Console ›</a>
+    </div>
+  </div>
+</main>
+
+<script>
+// Seed initial realistic customer data if not present
+function seedCustomerData() {
+  if (!localStorage.getItem('pe_orders')) {
+    const sampleOrders = [
+      {
+        id: 'PE-884920',
+        date: '24 Nov 2026',
+        items: [
+          { id: 0, name: 'Gold Whey Protein Concentrate', size: '1 kg (2.2 lb)', flavor: 'Rich Chocolate', qty: 1, price: 3349, img: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80' },
+          { id: 6, name: 'Micronised Creatine Monohydrate 200 Mesh', size: '250 g', flavor: 'Unflavoured', qty: 1, price: 649, img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80' }
+        ],
+        subtotal: 3998,
+        discount: 200,
+        total: 3798,
+        payment: 'UPI (GPay / PhonePe)',
+        status: 'Dispatched',
+        carrier: 'BlueDart Express',
+        trackingNumber: 'BD-992184012',
+        address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+        timeline: [
+          { title: 'Order Confirmed', time: '24 Nov, 10:30 AM', done: true },
+          { title: 'Packed at Warehouse', time: '24 Nov, 04:15 PM', done: true },
+          { title: 'In Transit with BlueDart', time: '25 Nov, 09:40 AM', done: true },
+          { title: 'Out for Delivery', time: 'Expected Today by 6 PM', done: false }
+        ],
+        scratchCode: 'PE-123456',
+        verified: true
+      },
+      {
+        id: 'PE-772109',
+        date: '10 Nov 2026',
+        items: [
+          { id: 16, name: 'Triple Strength Fish Oil Omega 3', size: '60 Softgels', flavor: 'Enteric Coated', qty: 2, price: 449, img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80' }
+        ],
+        subtotal: 898,
+        discount: 45,
+        total: 853,
+        payment: 'Credit Card',
+        status: 'Delivered',
+        carrier: 'Delhivery Surface',
+        trackingNumber: 'DLV-48192048',
+        address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+        timeline: [
+          { title: 'Order Confirmed', time: '10 Nov, 02:10 PM', done: true },
+          { title: 'Packed at Warehouse', time: '10 Nov, 06:40 PM', done: true },
+          { title: 'Dispatched', time: '11 Nov, 11:20 AM', done: true },
+          { title: 'Delivered Successfully', time: '13 Nov, 01:15 PM', done: true }
+        ],
+        scratchCode: 'PE-892144',
+        verified: true
+      }
+    ];
+    localStorage.setItem('pe_orders', JSON.stringify(sampleOrders));
+  }
+}
+
+function switchTab(mode) {
+  const isLogin = mode === 'login';
+  document.getElementById('tab-login').className = 'tab-btn ' + (isLogin ? 'active' : '');
+  document.getElementById('tab-register').className = 'tab-btn ' + (!isLogin ? 'active' : '');
+  document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('form-register').style.display = !isLogin ? 'block' : 'none';
+  document.getElementById('title-text').textContent = isLogin ? 'Customer Portal' : 'Create Customer Account';
+  document.getElementById('sub-text').textContent = isLogin ? 'Access your orders, track shipments & verify supplements' : 'Join thousands of genuine fitness enthusiasts across India';
+  hideAlert();
+}
+
+function showAlert(msg, isError) {
+  const el = document.getElementById('alert-box');
+  el.textContent = msg;
+  el.className = 'alert ' + (isError ? 'error' : 'success');
+  el.style.display = 'block';
+}
+
+function hideAlert() {
+  document.getElementById('alert-box').style.display = 'none';
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  seedCustomerData();
+  const customer = {
+    name: 'Rahul Sharma',
+    email: email || 'rahul.sharma@gmail.com',
+    phone: '+91 98765 43210',
+    city: 'Mumbai',
+    pincode: '400053',
+    address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+    joinedDate: 'May 2026',
+    loyaltyPoints: 340
+  };
+  localStorage.setItem('pe_user', JSON.stringify(customer));
+  showAlert('Login successful! Redirecting to your Customer Dashboard...', false);
+  setTimeout(() => {
+    window.location.href = 'customer-dashboard.html';
+  }, 600);
+}
+
+function demoLogin() {
+  seedCustomerData();
+  const customer = {
+    name: 'Rahul Sharma',
+    email: 'rahul.sharma@gmail.com',
+    phone: '+91 98765 43210',
+    city: 'Mumbai',
+    pincode: '400053',
+    address: 'Flat 402, Gym Enthusiasts Tower, Andheri West, Mumbai, MH - 400053',
+    joinedDate: 'May 2026',
+    loyaltyPoints: 340
+  };
+  localStorage.setItem('pe_user', JSON.stringify(customer));
+  showAlert('Demo customer verified! Opening your Dashboard...', false);
+  setTimeout(() => {
+    window.location.href = 'customer-dashboard.html';
+  }, 400);
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const pin = document.getElementById('reg-pin').value.trim();
+
+  if(!name || !email) {
+    showAlert('Please fill in all required fields.', true);
+    return;
+  }
+  seedCustomerData();
+  const customer = {
+    name: name,
+    email: email,
+    phone: phone.startsWith('+91') ? phone : '+91 ' + phone,
+    city: 'Mumbai',
+    pincode: pin || '400001',
+    address: pin ? `Registered Address, Pincode - ${pin}` : 'Default Delivery Address',
+    joinedDate: 'November 2026',
+    loyaltyPoints: 100
+  };
+  localStorage.setItem('pe_user', JSON.stringify(customer));
+  showAlert('Account created successfully! Welcome to Protein Emporium.', false);
+  setTimeout(() => {
+    window.location.href = 'customer-dashboard.html';
+  }, 600);
+}
+</script>
+
+</body>
+</html>

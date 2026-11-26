@@ -1,0 +1,1 @@
+<?php get_header(); ?><main class="w sec pg"><?php if(have_posts()): while(have_posts()): the_post(); ?><article><h1 class="dsp" style="font-size:40px;margin-bottom:12px"><?php the_title(); ?></h1><div><?php the_content(); ?></div></article><?php endwhile; endif; ?></main><?php get_footer(); ?>
